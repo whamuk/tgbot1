@@ -2,7 +2,7 @@ import sqlite3
 import telebot
 from datetime import datetime as dt
 from telebot import types
-bot = telebot.TeleBot("7466069203:AAF-7ZfFtWeXUX3UeHRpb1XvUjnAkNUiqdg")
+bot = telebot.TeleBot("7357998584:AAHdd5IUuS1iiAYIsP17htAsCEYz7xDHnTU")
 
 conn = sqlite3.connect('db/database.db', check_same_thread=False)
 cursor = conn.cursor()
@@ -12,17 +12,17 @@ def start_message(message):
 	btn1 = types.KeyboardButton("Написать в тех. поддержку")
 	markup.add(btn1)
 
-	us_id = [message.chat.id]
+	us_id = [message.chat.id, message.chat.username]
 	u_id = message.chat.id
 	db_table_user(T_id=us_id, u_id=u_id)
-	bot.send_message(message.chat.id, "Привет, я бот", reply_markup=markup)
+	bot.send_message(message.chat.id, "Добро пожаловать", reply_markup=markup)
 
 def db_table_user(T_id: list, u_id: int):
 
 	cursor.execute(f'SELECT Telegram_id FROM User WHERE Telegram_id = {u_id}')
 	data = cursor.fetchone()
 	if data is None:
-		cursor.execute('INSERT INTO User VALUES(?);', T_id)
+		cursor.execute('INSERT INTO User VALUES(?, ?);', T_id)
 
 		conn.commit()
 	else:
